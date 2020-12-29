@@ -15,16 +15,27 @@ export default class Appraisal extends React.Component {
         super(props);
         this.state = {
             isAuthenticated: false,
-            name: ''
+            name: '',
+            time:null,
+            testStarted:false
         };
         this.changeAuth = this.changeAuth.bind(this);
         this.toggleAuth = this.toggleAuth.bind(this);
+        this.startTest = this.startTest.bind(this);
     }
+    
      checkToken(token){
 
         const url = constants.serverBaseUrl+constants.port+constants.tokenValidation;
         return axios.post(url, {token})
         
+    }
+    startTest(){
+        
+        this.setState({
+            ...this.state,
+            testStarted:true
+        })
     }
     componentDidMount(){
         console.log("Component DID MOutn")
@@ -81,9 +92,12 @@ export default class Appraisal extends React.Component {
                         <Route path="/dashboard" exact render={
                             props => {
                                 if (this.state.isAuthenticated) {
-                                    return <Dashboard {...props} name={this.state.name} action={this.toggleAuth}/>
+                            return <Dashboard {...props} name={this.state.name} 
+                            action={this.toggleAuth} startTest={this.startTest} 
+                                    time = {this.state.time} 
+                            />
                                 }
-                                alert("Login First!!!!");
+                               // alert("Login First!!!!");
                                 return <Redirect to='/' from="/dashboard" />
                             }
                         } />
@@ -100,7 +114,7 @@ export default class Appraisal extends React.Component {
                         } />
                         <Route path="/question/:quesName" render={(props)=>{
                             return <Coding {...props} action ={this.toggleAuth} />
-                        }} name={this.state.name} />
+                        }} name={this.state.name} time={this.state.time} startTest={this.startTest} />
                     </Switch>
                 </div>
             </BrowserRouter>

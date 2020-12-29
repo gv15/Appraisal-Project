@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { constants } from "../utils/constants";
+import Countdown from 'react-countdown';
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-c_cpp';
 import "ace-builds/src-noconflict/mode-java"; //To Support Java
@@ -70,7 +71,9 @@ const Coding = (props) => {
         })
     }
     
-
+    function onTick(timer){
+        sessionStorage.setItem('x', timer.total);
+    }
     return (
         (!question.title) ? (
             <div>
@@ -82,6 +85,11 @@ const Coding = (props) => {
                 <div>
                     <h3 className='alert-info text-center'>{match.params.quesName}</h3>
                     <h6 className="text-left text-danger">{props.name}</h6>
+                    <Countdown 
+                    date={Date.now()+parseInt(sessionStorage.x)}
+                    className = "text-danger text-left"
+                    onTick = {onTick}
+                    />
                     <div className="col-display">
                     <div id='Question details' >
                         <p>Question: {question.question}</p>
