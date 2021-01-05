@@ -2,7 +2,7 @@ const express = require('express');
 const questionCrud = require('../db/crud-helpers/problemcrud');
 const problemInputOutputCrud = require("../db/crud-helpers/inputoutputcrud");
 const quesTestCrud = require("../db/crud-helpers/questiontestcrud");
-const quesLangCrud = require("../db/crud-helpers/queslangcodecrud");
+const problemLangCrud = require("../db/crud-helpers/problangcodecrud");
 
 const addRoute = express.Router();
 
@@ -50,15 +50,15 @@ addRoute.post("/questest", (req, res)=>{
     })
 })
 
-addRoute.post("/queslangcode", (req, res)=>{
-    quesLangCrud.add({
-        q_id:req.body.qid,
+addRoute.post("/problemlanguagecode", (req, res)=>{
+    problemLangCrud.add({
+        p_id:req.body.p_id,
         language:req.body.lang,
         code:req.body.code
     }).then(()=>{
         res.send("Mapping Succesfull");
-    }).catch(()=>{
-        res.send("error in mapping");
+    }).catch((err)=>{
+        res.send("error in mapping", err);
     })
 })
 module.exports = addRoute;

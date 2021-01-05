@@ -10,24 +10,24 @@ const QuestionDashboard = (props) => {
 
     const [questions, setQuestions] = useState([]);
     useEffect(() => {
+        if(sessionStorage.questions){
+            
+            setQuestions(JSON.parse(sessionStorage.questions));
+            return;
+        }
         console.log('requesting')
         const probUrl = constants.serverBaseUrl + constants.port + constants.problems + constants.all;
         axios({
             method: "GET",
             url: probUrl,
             headers: {
-                bearer: localStorage.token
+                bearer: sessionStorage.token
             }
         })
             .then((response) => {
-               
-               
-                console.log("Questions", response.data)
-                let time = calculateTime(response.data);
                 if(!sessionStorage.getItem('x'))
-                sessionStorage.x= time;
-                console.log(sessionStorage)
-                console.log(time);
+                sessionStorage.x= parseInt(response.data[4]);
+                sessionStorage.setItem('questions', JSON.stringify(response.data));
                 props.startTest();
                 setQuestions(response.data);
                
@@ -61,25 +61,7 @@ const QuestionDashboard = (props) => {
 
 
 
-    function calculateTime(questions) {
-        let timeInMs = 0
-        questions.forEach(question => {
-            console.log(question.level);
-            if (question.level == "Easy") {
-                timeInMs += 900000
-
-            }
-            if (question.level == "Medium") {
-                timeInMs += 1800000
-
-            }
-            if (question.level == "Hard") {
-                timeInMs += 2700000
-
-            }
-        });
-        return timeInMs;
-    }
+    
    
 
 
@@ -97,6 +79,7 @@ const QuestionDashboard = (props) => {
                 <h4 className='text-right text-secondary'>{props.name}</h4>
                 {
                     questions.map((question, index) => {
+                        if(index!=4){
                         let qLink = `/question/${question.title}`
                         let innerLink = `${index + 1}. ${question.title}`
                         return (
@@ -105,6 +88,7 @@ const QuestionDashboard = (props) => {
                                 <br />
                             </div>
                         )
+                        }
                     })
                 }
             </div>

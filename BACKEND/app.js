@@ -33,6 +33,8 @@ app.use("/validate", require('./routes/validatetokenroute'));
 
 app.use("/compile", require('./routes/compileroute'));
 
+app.use('/submit', require('./routes/submitRoute'));
+
 
 
 app.listen(process.env.PORT || 3030, ()=>{

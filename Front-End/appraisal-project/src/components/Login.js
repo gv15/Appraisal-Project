@@ -44,7 +44,7 @@ const Login = (props)=>{
             if(response.status==200){
                 console.log(response.data);
                 props.action(response.data.name);
-                localStorage.token = response.data.webToken;
+                sessionStorage.token = response.data.webToken;
                 props.history.push("/instruction");
             }
         }).catch((err)=>{

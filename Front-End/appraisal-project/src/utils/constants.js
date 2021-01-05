@@ -6,8 +6,8 @@ export const constants = {
     problems:"/problems",
     all:"/all",
     tokenValidation:"/validate/validatetoken",
-    compile:"/compile"
-
+    compile:"/compile",
+    submit:"/submit"
 }
 
                     

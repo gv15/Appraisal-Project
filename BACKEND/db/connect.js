@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 mongoose.connect(require("../utils/dbConstants").url, 
-{ useNewUrlParser: true }, (error)=>{
+{ useNewUrlParser: true,
+poolSize:10 }, (error)=>{
 if(!error){
     console.log("DB connected")
 }

@@ -11,11 +11,13 @@ import 'ace-builds/src-noconflict/snippets/java'; // To Support Java Snippets
 import 'ace-builds/src-noconflict/theme-monokai';
 import '../styles/editor.css'
 
+
 const Coding = (props) => {
 
     const [question, setQuestion] = useState({});
     const [code, setCode] = useState('');
-    const [language, setLanguage] = useState('c_cpp');
+    const [language, setLanguage] = useState('java');
+    const [compilerOutput, setCompilerOutput] = useState('');
     const { match } = props;
     // const textStyle = {
     //     "text-align":"justify",
@@ -24,16 +26,21 @@ const Coding = (props) => {
     const problemUrl = constants.serverBaseUrl + constants.port + constants.problems + "/" + match.params.quesName;
     var jsx = (<div className="text-success text center">Fetching Question.....</div>);
     useEffect(() => {
-       
-        
+        let question = sessionStorage.getItem(match.params.quesName);
+        if(question){
+           
+            setQuestion(JSON.parse(question));
+            return;
+        }
         
         axios.get(problemUrl, {
-            headers:{bearer:localStorage.token}
+            headers:{bearer:sessionStorage.token}
         })
             .then((response) => {
-               
+                sessionStorage.setItem(response.data.title, JSON.stringify(response.data));
+                console.log('setting question');
                 setQuestion(response.data);
-                localStorage.setItem(response.data.title, JSON.stringify({}));
+                
             })
             .catch((err) => {
                 if(err.response.status == 401){
@@ -48,31 +55,107 @@ const Coding = (props) => {
             })
     }, [])
     function handleChange(event){
+        console.log("Language Changing to ", event.target.value);
         setLanguage(event.target.value);
     }
     function onEditorLoad(editor) {
         editor.focus();
-
+        console.log("Editor Loaded");
     }
     function onChange(newValue, e) {
-        setCode(newValue);
+        if(sessionStorage['user_codes']){
+            let user_codes = JSON.parse(sessionStorage['user_codes']);
+            setUserCode(newValue, user_codes);
+        }
+        else{
+            sessionStorage.setItem('user_codes', "{}");
+        }
         
     }
+    function setUserCode(code, obj){
+        if(obj[question.title]){
+            if(obj[question.title][language]){
+                obj[question.title][language] = code;
+            }
+            else{
+                obj[question.title][language] = {};
+                obj[question.title][language] = code;
+            }
+            sessionStorage.setItem('user_codes', JSON.stringify(obj));
+        }
+        else{
+            obj[question.title] = {};
+            setUserCode(code, obj);
+        }
+    }
     function compile(){
+       
         let url = constants.serverBaseUrl+constants.port+constants.compile+"/"+language;
-        console.log(url);
+        let user_code = JSON.parse(sessionStorage.user_codes)[question.title][language];
+        
         axios.post(url, {
-            code:code,
+            code:user_code||question.code,
             q_id:question._id
         }, {
             headers:{
-                bearer:localStorage.token
+                bearer:sessionStorage.token
             }
+        }).then((response)=>{
+            setCompilerOutput(response.data.message);
+        }).catch((err)=>{
+            console.log(err.response);
         })
+    }
+    function returnDefaultCodeEditorValue(){
+        //console.log("Running Default Code Value");
+        if(!sessionStorage.getItem('user_codes')){
+            return question['codes'][language]
+        }
+       let user_codes = JSON.parse(sessionStorage['user_codes']);
+      
+    //   console.log("language", language);
+    //    if(user_codes[question.title]){
+    //        console.log('returning',user_codes[question.title][language])
+    //    }
+    //    else{
+    //     console.log('returning',question.codes[language])
+       //}
+
+
+       if(user_codes[question.title]){
+        return user_codes[question.title][language]?user_codes[question.title][language]:question.codes[language]
+    }
+    else{
+     console.log('returning',question.codes[language])
+     return question.codes[language]
+    }
+    
     }
     
     function onTick(timer){
         sessionStorage.setItem('x', timer.total);
+    }
+    function handleCompileChange(event){
+        console.log(event.target)
+    }   
+    function submitCode(){
+        let code = JSON.parse(sessionStorage.user_codes)[question.title][language];
+        let submitObject = {
+           title:question.title,
+           q_id:question['_id'],
+           level:question['level'],
+           code
+        }
+       axios.post(constants.serverBaseUrl+constants.port+constants.submit+"/"+language,
+       submitObject,
+       {headers:{bearer:sessionStorage.token}
+       }
+       ).then((response)=>{
+           alert(response.data.message)
+       }).catch((err)=>{
+           alert(err.response.data.message);
+       })
+        
     }
     return (
         (!question.title) ? (
@@ -112,7 +195,10 @@ const Coding = (props) => {
                             onLoad={onEditorLoad}
                              width='550PX'
                              onChange = {onChange}
-                            // height='300PX'
+                             value = {
+                                 returnDefaultCodeEditorValue()?returnDefaultCodeEditorValue():''
+                             }
+                             height='400PX'
                             setOptions={{
                                 enableBasicAutocompletion: true,
                                 enableLiveAutocompletion: true,
@@ -125,7 +211,10 @@ const Coding = (props) => {
                         <br />
                         <button className="btn btn-primary" onClick = {compile}>Compile & Run</button>
                         
-                        <button className="btn btn-success">Submit</button>
+                        <button className="btn btn-success" onClick={submitCode} >Submit</button>
+                        <br></br>
+                        <label className='text-success'>Compiler Output</label>
+                        <textarea readOnly className = 'form-control' rows="12" cols = '40' value={compilerOutput} onChange={handleCompileChange} />
                     </div>
                     </div>
 

@@ -39,8 +39,8 @@ export default class Appraisal extends React.Component {
     }
     componentDidMount(){
         console.log("Component DID MOutn")
-        if(localStorage.token){
-        this.checkToken(localStorage.token)
+        if(sessionStorage.token){
+        this.checkToken(sessionStorage.token)
         .then((result)=>{
           //  console.log(result);
             if(result.data.isTokenValid){
