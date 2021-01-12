@@ -58,7 +58,7 @@ const Register = (props) => {
         {
             return;
         }
-        let url = constants.serverBaseUrl + constants.port + constants.register;
+        let url = constants.serverBaseUrl + constants.register;
         axios.post(url, {
             name,email, password
         }).then(

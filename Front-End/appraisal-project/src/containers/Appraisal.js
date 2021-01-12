@@ -114,9 +114,24 @@ export default class Appraisal extends React.Component {
                             }
                         } />
                         <Route path="/question/:quesName" render={(props)=>{
-                            return <Coding {...props} action ={this.toggleAuth} />
-                        }} name={this.state.name} time={this.state.time} startTest={this.startTest} />
-                        <Route path="/ranks" component={Ranks}/>
+                            if(this.state.isAuthenticated){
+                                return <Coding {...props} action ={this.toggleAuth} 
+                                name={this.state.name} time={this.state.time} startTest={this.startTest} />
+                            }
+                            else{
+                                return <Redirect to="/" from="/question/:quesName"/>
+                            }
+                        }}  />
+                        <Route path="/ranks" 
+                        render ={ (props)=>{
+                            if(this.state.isAuthenticated){
+                                return <Ranks {...props} name={this.state.name} />
+                            }
+                            else{
+                                return <Redirect to='/' from='/ranks' />
+                            }
+                        }}
+                        />
                     </Switch>
                 </div>
             </BrowserRouter>

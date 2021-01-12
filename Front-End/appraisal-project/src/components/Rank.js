@@ -1,12 +1,12 @@
 import React,{useState, useEffect} from 'react';
 import {constants} from '../utils/constants';
 import axios from 'axios';
-const Ranks = ()=>{
+const Ranks = (props)=>{
     const [results, setResults] = useState(null);
     useEffect(()=>{
     
         axios.get(
-            constants.serverBaseUrl+constants.port+constants.ranks,{
+            constants.serverBaseUrl+constants.ranks,{
                 headers:{
                     bearer:sessionStorage.token
                 }
@@ -22,6 +22,7 @@ const Ranks = ()=>{
     if(results){
     return(
         <div>
+            <h2 className="text-center text-success">Welcome {props.name}</h2>
             <table className="table table-borderless table-dark">
                 <thead className="thead-light">
                     <tr>

@@ -11,7 +11,7 @@ const QuestionDashboard = (props) => {
     const [questions, setQuestions] = useState([]);
     useEffect(() => {
        
-        const probUrl = constants.serverBaseUrl + constants.port + constants.problems + constants.all;
+        const probUrl = constants.serverBaseUrl + constants.problems + constants.all;
         axios({
             method: "GET",
             url: probUrl,
@@ -67,7 +67,7 @@ const QuestionDashboard = (props) => {
                 <Header title="Questions" titleClass="text-center alert-success" />
 
                 <Countdown className="text-left text-danger"
-                    date={Date.now() + parseInt(sessionStorage.x)}
+                    date={Date.now() + parseInt(sessionStorage.x) -60000}
                     
                     onTick = {onTick}
                 />

@@ -1,6 +1,6 @@
 export const constants = {
-    serverBaseUrl: "http://localhost:" ,
-    port:"3030",
+    serverBaseUrl: "http://backend-dev2.ap-south-1.elasticbeanstalk.com" ,
+    
     login:"/accounts/login",
     register:"/accounts/register",
     problems:"/problems",

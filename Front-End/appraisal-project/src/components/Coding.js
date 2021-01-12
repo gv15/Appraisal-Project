@@ -23,7 +23,7 @@ const Coding = (props) => {
     //     "text-align":"justify",
     //     "font-size":"10px"
     // }
-    const problemUrl = constants.serverBaseUrl + constants.port + constants.problems + "/" + match.params.quesName;
+    const problemUrl = constants.serverBaseUrl + constants.problems + "/" + match.params.quesName;
     var jsx = (<div className="text-success text center">Fetching Question.....</div>);
     useEffect(() => {
         
