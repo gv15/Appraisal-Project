@@ -10,8 +10,8 @@ compileRouter.post('/java', (req, res)=>{
     let tokenValidationResponse = token.validate(req.headers.bearer);
     if(tokenValidationResponse.isTokenValid){
         
-        fs.writeFileSync('./Compile.java',req.body.code);
-        const cmd = `javac "${process.cwd()}\\Compile.java"`;
+        fs.writeFileSync('./Solution.java',req.body.code);
+        const cmd = `javac "${process.cwd()}\\Solution.java"`;
       
         cp.exec(cmd, (err, stdout, stderr)=>{
             if(stderr){

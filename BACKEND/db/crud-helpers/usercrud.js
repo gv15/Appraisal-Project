@@ -41,7 +41,11 @@ const crud = {
             return err;
         }
         return user;
+    },
+    async giveAllUsers(){
+       return await User.find({});
     }
+    
         
 }
 

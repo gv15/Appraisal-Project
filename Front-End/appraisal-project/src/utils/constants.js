@@ -7,7 +7,8 @@ export const constants = {
     all:"/all",
     tokenValidation:"/validate/validatetoken",
     compile:"/compile",
-    submit:"/submit"
+    submit:"/submit",
+    ranks:"/results/ranks"
 }
 
                     

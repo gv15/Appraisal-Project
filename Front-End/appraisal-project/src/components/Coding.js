@@ -26,19 +26,14 @@ const Coding = (props) => {
     const problemUrl = constants.serverBaseUrl + constants.port + constants.problems + "/" + match.params.quesName;
     var jsx = (<div className="text-success text center">Fetching Question.....</div>);
     useEffect(() => {
-        let question = sessionStorage.getItem(match.params.quesName);
-        if(question){
-           
-            setQuestion(JSON.parse(question));
-            return;
-        }
+        
+    
         
         axios.get(problemUrl, {
             headers:{bearer:sessionStorage.token}
         })
             .then((response) => {
-                sessionStorage.setItem(response.data.title, JSON.stringify(response.data));
-                console.log('setting question');
+                console.log((Date.now()+response.data['timeLeft']))
                 setQuestion(response.data);
                 
             })
@@ -151,6 +146,7 @@ const Coding = (props) => {
        {headers:{bearer:sessionStorage.token}
        }
        ).then((response)=>{
+        console.log(response.data.message)
            alert(response.data.message)
        }).catch((err)=>{
            alert(err.response.data.message);
@@ -169,7 +165,7 @@ const Coding = (props) => {
                     <h3 className='alert-info text-center'>{match.params.quesName}</h3>
                     <h6 className="text-left text-danger">{props.name}</h6>
                     <Countdown 
-                    date={Date.now()+parseInt(sessionStorage.x)}
+                    date={Date.now()+question["timeLeft"]}
                     className = "text-danger text-left"
                     onTick = {onTick}
                     />

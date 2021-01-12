@@ -10,12 +10,7 @@ const QuestionDashboard = (props) => {
 
     const [questions, setQuestions] = useState([]);
     useEffect(() => {
-        if(sessionStorage.questions){
-            
-            setQuestions(JSON.parse(sessionStorage.questions));
-            return;
-        }
-        console.log('requesting')
+       
         const probUrl = constants.serverBaseUrl + constants.port + constants.problems + constants.all;
         axios({
             method: "GET",
@@ -25,7 +20,7 @@ const QuestionDashboard = (props) => {
             }
         })
             .then((response) => {
-                if(!sessionStorage.getItem('x'))
+                
                 sessionStorage.x= parseInt(response.data[4]);
                 sessionStorage.setItem('questions', JSON.stringify(response.data));
                 props.startTest();

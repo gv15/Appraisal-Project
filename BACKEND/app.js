@@ -35,7 +35,7 @@ app.use("/compile", require('./routes/compileroute'));
 
 app.use('/submit', require('./routes/submitRoute'));
 
-
+app.use("/results", require('./routes/resultRoute'));
 
 app.listen(process.env.PORT || 3030, ()=>{
     console.log("server started");
