@@ -35,7 +35,7 @@ problemRouter.get("/all", (req, res) => {
 
                         let testTime = utils.calculateTestTime(questions);
                         questions.push(testTime);
-                        let endTimeStamp = Date.now() + testTime + 90000;
+                        let endTimeStamp = Date.now() + testTime ;
                         submitTimeCrud.registerStamp({
                             u_id: user.user_id,
                             timeStamp: endTimeStamp
