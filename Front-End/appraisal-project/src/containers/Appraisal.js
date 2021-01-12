@@ -4,6 +4,7 @@ import Login from '../components/Login';
 import Register from "../components/Register";
 import Dashboard from '../components/QuestionDashboard';
 import Coding from '../components/Coding';
+import Ranks from '../components/Rank';
 import Instruction from "../components/Instructions";
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import axios from 'axios';
@@ -115,6 +116,7 @@ export default class Appraisal extends React.Component {
                         <Route path="/question/:quesName" render={(props)=>{
                             return <Coding {...props} action ={this.toggleAuth} />
                         }} name={this.state.name} time={this.state.time} startTest={this.startTest} />
+                        <Route path="/ranks" component={Ranks}/>
                     </Switch>
                 </div>
             </BrowserRouter>
